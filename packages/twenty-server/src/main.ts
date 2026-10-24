@@ -16,6 +16,7 @@ import { setPgDateTypeParser } from 'src/database/pg/set-pg-date-type-parser';
 import { ApplicationRepeatedEventRecorderService } from 'src/engine/core-modules/event-logs/emit/application-repeated-event-recorder.service';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { LoggerService } from 'src/engine/core-modules/logger/logger.service';
+import { MessageQueueWorkerDrainService } from 'src/engine/core-modules/message-queue/services/message-queue-worker-drain.service';
 import { getSessionStorageOptions } from 'src/engine/core-modules/session-storage/session-storage.module-factory';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { configTransformers } from 'src/engine/core-modules/twenty-config/utils/config-transformers.util';
@@ -113,12 +114,16 @@ const bootstrap = async () => {
   const applicationRepeatedEventRecorder = app.get(
     ApplicationRepeatedEventRecorderService,
   );
+  const messageQueueWorkerDrainService = app.get(
+    MessageQueueWorkerDrainService,
+  );
 
   for (const signal of ['SIGTERM', 'SIGINT'] as const) {
     process.once(signal, () => {
       void Promise.allSettled([
         usageRecorder.flushAndStop(),
         applicationRepeatedEventRecorder.flushAndStop(),
+        messageQueueWorkerDrainService.drainWorkers(),
       ]).finally(() => process.exit(0));
     });
   }

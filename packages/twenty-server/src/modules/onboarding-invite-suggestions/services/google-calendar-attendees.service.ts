@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { google } from 'googleapis';
+import { google } from 'src/engine/utils/google-apis.util';
 
 import { GoogleOAuth2ClientProvider } from 'src/modules/connected-account/oauth2-client-manager/drivers/google/google-oauth2-client.provider';
 import { ONBOARDING_INVITE_SUGGESTIONS_LOOKAHEAD_DAYS } from 'src/modules/onboarding-invite-suggestions/constants/onboarding-invite-suggestions-lookahead-days.constant';

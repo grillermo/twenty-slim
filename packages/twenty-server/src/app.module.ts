@@ -16,6 +16,8 @@ import { McpModule } from 'src/engine/api/mcp/mcp.module';
 import { RestApiModule } from 'src/engine/api/rest/rest-api.module';
 import { WorkspaceAuthContextMiddleware } from 'src/engine/core-modules/auth/middlewares/workspace-auth-context.middleware';
 import { FrontendModule } from 'src/engine/core-modules/frontend/frontend.module';
+import { JobsModule } from 'src/engine/core-modules/message-queue/jobs.module';
+import { MessageQueueModule } from 'src/engine/core-modules/message-queue/message-queue.module';
 import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { DataloaderModule } from 'src/engine/dataloaders/dataloader.module';
 import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/workspace-metadata-version/workspace-metadata-version.module';
@@ -30,6 +32,7 @@ import { UserSessionModule } from 'src/engine/core-modules/user-session/user-ses
 import { RestCoreMiddleware } from 'src/engine/middlewares/rest-core.middleware';
 import { TwentyOrmModule } from 'src/engine/twenty-orm/twenty-orm.module';
 import { WorkspaceCacheStorageModule } from 'src/engine/workspace-cache-storage/workspace-cache-storage.module';
+import { WorkspaceEventEmitterModule } from 'src/engine/workspace-event-emitter/workspace-event-emitter.module';
 import { WorkspaceNotSuspendedGuard } from 'src/engine/guards/workspace-not-suspended.guard';
 import { UnhandledExceptionFilter } from 'src/filters/unhandled-exception.filter';
 import { ModulesModule } from 'src/modules/modules.module';
@@ -45,6 +48,16 @@ const MIGRATED_REST_METHODS = [
   RequestMethod.PUT,
   RequestMethod.GET,
 ];
+
+// Runs the queue worker in this process (instead of a separate queue-worker one) to load the app once.
+const IN_PROCESS_WORKER_MODULES =
+  process.env.IS_IN_PROCESS_WORKER_ENABLED === 'true'
+    ? [
+        MessageQueueModule.registerExplorer(),
+        WorkspaceEventEmitterModule,
+        JobsModule,
+      ]
+    : [];
 
 @Module({
   imports: [
@@ -70,6 +83,7 @@ const MIGRATED_REST_METHODS = [
     UserSessionModule,
     WorkspaceMetadataVersionModule,
     FrontendModule,
+    ...IN_PROCESS_WORKER_MODULES,
   ],
   providers: [
     {

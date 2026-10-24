@@ -1,3 +1,26 @@
+# Twenty slim (fork)
+
+A fork of [twentyhq/twenty](https://github.com/twentyhq/twenty) tuned to self-host on a small machine (a 16 GB Mac mini serving one workspace), where upstream's server and worker processes together used about 1.8 GB of RAM while idle. Most of that is the app's code: each process loads about 17,600 modules (about 500 MB of V8 heap) before handling a single request.
+
+What this fork changes:
+
+- **Optional in-process queue worker.** With `IS_IN_PROCESS_WORKER_ENABLED=true`, the server also runs the BullMQ workers (`MessageQueueModule.registerExplorer()`, `WorkspaceEventEmitterModule`, `JobsModule` in `app.module.ts`), so you skip the separate `queue-worker` process and the app loads only once. On SIGTERM/SIGINT, the server drains the workers before exiting. When the variable is unset, behavior is the same as upstream. Tradeoff: jobs share the event loop with HTTP requests, so a long job can slow the UI.
+- **Per-API Google clients.** `src/engine/utils/google-apis.util.ts` loads only Gmail, Calendar, People and OAuth2 instead of the root `googleapis` package, which eagerly loads about 300 API clients (about 60 MB of heap → about 4 MB).
+- **Lazy jsdom.** `sanitizeFile` (now async) imports jsdom only when an SVG is uploaded, which saves about 36 MB of heap per process.
+
+Recommended way to run it (one process, with V8 traded toward lower memory):
+
+```bash
+IS_IN_PROCESS_WORKER_ENABLED=true NODE_ENV=production \
+  node --lite-mode --max-old-space-size=1024 --max-semi-space-size=2 dist/main
+```
+
+`--lite-mode` turns off V8's optimizing compilers. That's fine for a low-traffic CRM, but CPU-heavy work runs slower. If large imports or exports run out of memory, raise `--max-old-space-size`.
+
+Measured on the Mac mini (idle, after a restart): about 1.77 GB across two processes → about 570 MB in one.
+
+---
+
 <p align="center">
   <a href="https://www.twenty.com">
     <img src="./packages/twenty-website/public/images/core/logo.svg" width="100px" alt="Twenty logo" />

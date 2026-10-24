@@ -1,7 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 
 import { isNonEmptyString } from '@sniptt/guards';
-import { type gmail_v1, google, type people_v1 } from 'googleapis';
+import { type gmail_v1, type people_v1 } from 'googleapis';
+
+import { google } from 'src/engine/utils/google-apis.util';
 import MailComposer from 'nodemailer/lib/mail-composer';
 import { isDefined } from 'twenty-shared/utils';
 

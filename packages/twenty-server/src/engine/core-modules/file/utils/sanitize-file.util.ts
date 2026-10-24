@@ -1,7 +1,6 @@
 import DOMPurify from 'dompurify';
-import { JSDOM } from 'jsdom';
 
-export const sanitizeFile = ({
+export const sanitizeFile = async ({
   file,
   ext,
   mimeType,
@@ -9,8 +8,10 @@ export const sanitizeFile = ({
   file: Buffer | Uint8Array | string;
   ext: string;
   mimeType: string | undefined;
-}): Buffer | Uint8Array | string => {
+}): Promise<Buffer | Uint8Array | string> => {
   if (ext === 'svg' || mimeType === 'image/svg+xml') {
+    // jsdom costs ~36 MB of heap per process; load it only when an SVG arrives.
+    const { JSDOM } = await import('jsdom');
     const window = new JSDOM('').window;
     const purify = DOMPurify(window);
 

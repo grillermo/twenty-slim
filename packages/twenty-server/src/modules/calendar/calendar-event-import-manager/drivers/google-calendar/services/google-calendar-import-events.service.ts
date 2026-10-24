@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { type GaxiosError } from 'gaxios';
-import { google } from 'googleapis';
+import { google } from 'src/engine/utils/google-apis.util';
 import { isDefined } from 'twenty-shared/utils';
 
 import { formatGoogleCalendarEvents } from 'src/modules/calendar/calendar-event-import-manager/drivers/google-calendar/utils/format-google-calendar-event.util';

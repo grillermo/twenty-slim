@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 
 import { isNonEmptyString } from '@sniptt/guards';
 import { type GaxiosError } from 'gaxios';
-import { type calendar_v3, type gmail_v1, google } from 'googleapis';
+import { type calendar_v3, type gmail_v1 } from 'googleapis';
+
+import { google } from 'src/engine/utils/google-apis.util';
 import { isDefined } from 'twenty-shared/utils';
 import { v4 } from 'uuid';
 

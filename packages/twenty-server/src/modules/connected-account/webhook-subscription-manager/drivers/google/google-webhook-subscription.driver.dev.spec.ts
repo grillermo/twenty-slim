@@ -1,4 +1,4 @@
-import { google } from 'googleapis';
+import { google } from 'src/engine/utils/google-apis.util';
 import { WebhookSubscriptionChannelType } from 'twenty-shared/types';
 
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';

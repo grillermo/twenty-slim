@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 
 import { batchFetchImplementation } from '@jrmdayn/googleapis-batcher';
 import { isNonEmptyString } from '@sniptt/guards';
-import { type gmail_v1 as gmailV1, google } from 'googleapis';
+import { type gmail_v1 as gmailV1 } from 'googleapis';
+
+import { google } from 'src/engine/utils/google-apis.util';
 import { isDefined } from 'twenty-shared/utils';
 
 import { MessageFolderImportPolicy } from 'twenty-shared/types';

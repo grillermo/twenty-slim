@@ -23,7 +23,7 @@ export const prepareFileForStorageOrThrow = async ({
     filename: resourcePath,
   });
 
-  const sanitizedSourceFile = sanitizeFile({
+  const sanitizedSourceFile = await sanitizeFile({
     file: sourceFile,
     ext,
     mimeType,

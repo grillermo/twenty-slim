@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { google } from 'googleapis';
+import { google } from 'src/engine/utils/google-apis.util';
 import { isDefined } from 'twenty-shared/utils';
 
 import { type PlaintextString } from 'src/engine/core-modules/secret-encryption/branded-strings/plaintext-string.type';

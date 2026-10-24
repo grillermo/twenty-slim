@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { google } from 'googleapis';
+import { google } from 'src/engine/utils/google-apis.util';
 import { isDefined } from 'twenty-shared/utils';
 
 import { GoogleOAuth2ClientProvider } from 'src/modules/connected-account/oauth2-client-manager/drivers/google/google-oauth2-client.provider';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { google } from 'googleapis';
+import { google } from 'src/engine/utils/google-apis.util';
 
 import { type ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 import { formatGoogleCalendarEvents } from 'src/modules/calendar/calendar-event-import-manager/drivers/google-calendar/utils/format-google-calendar-event.util';

@@ -258,7 +258,7 @@ export class FileUploadCompletionService {
       throw error;
     }
 
-    const sanitizedFile = sanitizeFile({
+    const sanitizedFile = await sanitizeFile({
       file,
       ext: 'svg',
       mimeType,
